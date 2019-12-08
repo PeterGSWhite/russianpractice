@@ -21,46 +21,44 @@ export default {
   
     data () {
       return {
-        num: "42",
         numDir: 'sound/forvo/numbers/',
       }
     },
     methods: {
+      async test(dir) {
+        let nums =  [1,2,22,3,32,12]
+        for(let num in nums) {
+          await this.playSound(dir, num)
+        }
+      },
       playSound(dir, s) {
         console.log('playsound', dir, s)
         try {
           let path = dir + s + '.mp3'
           require('../../public/'+path)
-          this.playHowl(path, s)
+          return this.playHowl(path, s)
         } catch {
-          this.playTTS(s)
+          return this.playTTS(s)
         }    
       },
       playHowl(path, s) {
         console.log('playhowl', path, s)
         var sound = new Howl({
           src: path,
-          onloaderror: function() {
-            speech.speak({
-              text: s,
-            }).then(() => {
-              console.log('tts done')
-            }).catch(e => {
-              console.log("An error occurred :", e)
-            })
-          },
+          onloaderror: this.playTTS
         });
-        sound.play(); 
+        return sound.play(); 
       },
       playTTS(s) {
-        console.log('playTTS')
+        console.log('playTTS', s)
         let rate = 1 + Math.random()/10 - Math.random()/10
         let pitch = 1 + Math.random()/15 - Math.random()/15
         console.log(rate, pitch)
         speech.setRate(rate)
         speech.setPitch(pitch)
-        speech.speak({
-          text: s,
+        return speech.speak({
+          text: String(s),
+          queue: true,
         }).then(() => {
           console.log('tts done')
         }).catch(e => {

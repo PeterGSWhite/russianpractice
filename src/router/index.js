@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import OneToTen from '../views/practice/numbers/OneToTen.vue'
+import NumberPractice from '../views/practice/numbers/NumberPractice.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'OneToTen',
-    component: OneToTen
+    name: 'NumberPractice',
+    component: NumberPractice
   },
   
 ]
