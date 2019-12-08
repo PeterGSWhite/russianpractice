@@ -8,11 +8,12 @@
         style="width: 500px">
           <h1>Number Practice</h1>
           <h2>Lowest number</h2><br>
-          <input v-model="start" min="0" max="999999999"><br>
+          <input v-model.number="start" type="number" min=0 max=999999999><br>
           <h2>Highest number</h2><br>
-          <input v-model="end" max="1000000000" :min="start+1"><br>
-          <v-slider v-model="speed" min="1" max="5" label="Speed"></v-slider>
-          <v-btn  @click="playAll()">Play</v-btn>
+          <input v-model.number="end" type="number" max=1000000000 :min=Number(start)+1 ><br>
+          <v-slider v-model="speed" thumb-label min="1" max="5" label="Speed"></v-slider>
+          <v-slider v-model="rounds" thumb-label min="5" max="10" label="Rounds"></v-slider>
+          <v-btn v-if="!queue.length"  @click="enqueueAndPlay()">Play</v-btn>
         </v-flex>
       </v-layout>
     </v-container>   
@@ -28,10 +29,25 @@ export default {
       speed: 1,
       start: 0,
       end: 10,
-      num: 78
+      rounds: 5,
+      answers: []
     }
   },
   methods: {
+    enqueueAndPlay() {
+      console.log(this.start, this.end, typeof(this.end))
+      for(let i = 0; i<this.rounds; i++) {
+        let num = this.randomRange(this.start,this.end+1)
+        this.queue.push(num)
+        this.answers.push(num)
+      }
+      this.playAll()
+    },
+    randomRange(min, max) {
+    let num = Math.floor(Math.random() * (max - min) + min);
+    console.log(min, max, num)
+    return num
+    },
     
   },
   mixins: [Sounds],

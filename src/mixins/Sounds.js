@@ -22,7 +22,7 @@ export default {
     data () {
       return {
         numDir: 'sound/forvo/numbers/',
-        queue:[5,4,'How are you today mr bonobo?',2, 'who goes there mr mr mr booooy',1,0, 'It is friday night and I feel good'],
+        queue:[],
         howling: 0,
         s: null
       }
@@ -88,6 +88,7 @@ export default {
           listeners: {
             onend: () => {
               console.log("End utterance")
+              this.howling = 0
             }
           }
         })
