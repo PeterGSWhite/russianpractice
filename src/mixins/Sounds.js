@@ -22,13 +22,34 @@ export default {
     data () {
       return {
         numDir: 'sound/forvo/numbers/',
+        nums:[22,3,32,12,1,1,0,65,87]
       }
     },
     methods: {
-      async test(dir) {
-        let nums =  [1,2,22,3,32,12]
-        for(let num in nums) {
-          await this.playSound(dir, num)
+      test() {
+        console.log(this.nums)
+        if(this.nums.length) {
+          let num = this.nums.pop()
+          let i = this.playSound(this.numDir, num)//.then((token)=>{
+          console.log('beep',i)
+          
+          if(i instanceof Promise) {
+            console.log('baw')
+            i.then((token)=>{
+              console.log('daw', token)
+              this.test()
+            })
+          }
+          else if(typeof i !== "undefined"){
+            this.test()
+          }
+          else{
+            setTimeout(()=> {
+              console.log('ska')
+              this.test()
+            }, 2000)
+          }
+          
         }
       },
       playSound(dir, s) {
@@ -36,18 +57,26 @@ export default {
         try {
           let path = dir + s + '.mp3'
           require('../../public/'+path)
-          return this.playHowl(path, s)
+          this.playHowl(path, s)
         } catch {
-          return this.playTTS(s)
+          this.playTTS(s)
         }    
       },
       playHowl(path, s) {
-        console.log('playhowl', path, s)
-        var sound = new Howl({
-          src: path,
-          onloaderror: this.playTTS
-        });
-        return sound.play(); 
+        try {
+          console.log('playhowl', path, s)
+          var sound = new Howl({
+            src: path,
+            onloaderror: this.playTTS
+          });
+          sound.on('end', ()=> {
+            return 1
+          })
+          sound.play();
+        }
+        catch {
+          return 0
+        }
       },
       playTTS(s) {
         console.log('playTTS', s)
@@ -61,8 +90,10 @@ export default {
           queue: true,
         }).then(() => {
           console.log('tts done')
+          return 1
         }).catch(e => {
           console.log("An error occurred :", e)
+          return 0
         })
       }
     },

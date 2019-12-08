@@ -12,7 +12,7 @@
           <h2>Highest number</h2><br>
           <input v-model="end" max="1000000000" :min="start+1"><br>
           <v-slider v-model="speed" min="1" max="5" label="Speed"></v-slider>
-          <v-btn  @click="test(numDir)">Play {{num}}</v-btn>
+          <v-btn  @click="test()">Play</v-btn>
         </v-flex>
       </v-layout>
     </v-container>   
