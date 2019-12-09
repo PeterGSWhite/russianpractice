@@ -1,6 +1,7 @@
 const {Howl} = require('howler');
 import Speech from 'speak-tts'
 const speech = new Speech() 
+import paths from '@/paths'
 speech.init({
   'lang': 'ru-RU',
   'voice':'Google русский',
@@ -12,7 +13,6 @@ speech.init({
       }
   }
 }).then((data) => {
-    // The "data" object contains the list of available voices and the voice synthesis params
     console.log("Speech is ready, voices are available", data)
 }).catch(e => {
     console.log("An error occured while initializing : ", e)
@@ -21,21 +21,24 @@ export default {
   
     data () {
       return {
-        numDir: 'sound/forvo/numbers/',
+        numDir: 'sound/numbers/',
         queue:[],
         howling: 0,
         s: null
       }
     },
+    
     methods: {
-      playAll() {
-        console.log(this.queue)
+      playAll(sleepTime) {
+        console.log(this.queue, this.sleepTime)
         if(this.queue.length) {
           let utterance = this.queue.pop()
           let i = this.playSound(this.numDir, utterance)
           if(i instanceof Promise) {
             i.then(()=>{
-              this.playAll()
+              setTimeout(() => {
+                this.playAll(sleepTime)
+              }, this.sleepTime);
             })
           }
         }
@@ -53,10 +56,20 @@ export default {
         this.s = s
         console.log('playsound', dir, this.s)
         try {
-          let path = dir + this.s + '.mp3'
+          // Get to directory with relevant sounds
+          let subDir = dir + this.s +'/' + this.s + '_'
+          let numOptions = paths['numbers'][this.s]
+          // If there are no sound files just playTTS
+          if(numOptions==0) {
+            return this.playTTS()
+          }
+          // Pick a random file
+          let ver = Math.floor(Math.random() * numOptions);
+          let path = subDir + ver + '.mp3'
           require('../../public/'+path)
           return this.playHowl(path)
         } catch {
+          // If there is an error loading an mp3, just playTTS
           return this.playTTS()
         }    
       },
@@ -92,13 +105,6 @@ export default {
             }
           }
         })
-        // }).then(() => {
-        //   console.log('tts done')
-        //   return 1
-        // }).catch(e => {
-        //   console.log("An error occurred :", e)
-        //   return 0
-        // })
       }
     },
     
