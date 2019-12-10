@@ -105,6 +105,9 @@ export default {
             }
           }
         })
+      },
+      playGongSound() {
+        this.playHowl('sound/gong.mp3')
       }
     },
     
