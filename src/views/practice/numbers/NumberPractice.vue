@@ -13,10 +13,11 @@
           <input v-model.number="end" type="number" max=1000000000 :min=Number(start)+1 ><br>
           <v-slider v-model="difficulty" thumb-label min="1" max="5" label="Difficulty"></v-slider>
           <v-slider v-model="rounds" thumb-label min="5" max="10" label="Rounds"></v-slider>
-          <v-btn v-if="!queue.length"  @click="enqueueAndPlay()">Play</v-btn>
+          <v-btn @click="enqueueAndPlay()">Play</v-btn>
         </v-flex>
         <v-row
         class="mb-6"
+         v-if="gameActive"
         >
       <v-col>
         <v-btn @click="submitAnswer(choiceAs)">{{choiceAs[answerIndex]}}</v-btn>
@@ -31,7 +32,14 @@
         <v-btn @click="submitAnswer(choiceDs)">{{choiceDs[answerIndex]}}</v-btn>
       </v-col>
     </v-row>
-      </v-layout>
+    <v-flex 
+        xs12 class="elevation-1 pa-2 ma-1"
+        style="width: 500px"
+        v-if="!gameActive">
+          <h1>le</h1>
+          <h2>omo</h2><br>
+    </v-flex>
+    </v-layout>
     </v-container>   
   </div>
 </template>
@@ -57,10 +65,13 @@ export default {
   },
   computed: {
     sleepTime() {
-      return 300*(~~(5/this.difficulty))
+      return 500*(~~(5/this.difficulty))
     },
     answerIndex() {
       return this.rounds - this.roundIndex
+    },
+    gameActive() {
+      return this.roundIndex <= this.rounds
     }
   },
   methods: {
@@ -91,6 +102,7 @@ export default {
       this.playAll(this.sleepTime)
     },
     addRound(num) {
+      console.log('coorect', num)
       this.correctAnswers.push(num)
       let choice = this.randomRange(0,4)
       if(choice == 0) {
@@ -109,48 +121,56 @@ export default {
     },
     makeOtherChoices(num, x, y, z) {
       let numerals = String(num).split('')
-      let answers = []
+      let permutations = []
+      let answers = new Set()
       // Get legit permutations
       let permutator = this.permute(numerals.slice())
       let perm = permutator.next()
       while(!perm.done) {
-        answers.push(perm.value)
+        permutations.push(perm.value)
+        answers.add(parseInt(perm.value.join('')))
         perm = permutator.next()
       }
+      console.log('oi')
       // If not enough answers, start mutating permutations
-      let alreadyMutated = new Set()
-      answers.push(numerals)
-      while(answers.length < 4) {
-        let i = this.randomRange(0, answers.length)
-        if(!alreadyMutated.has(i)){
-          alreadyMutated.add(i)
-          if(alreadyMutated.length > 2 || alreadyMutated.length >= answers.length) {
-            alreadyMutated = new Set()
-          }
-          answers.push(this.mutatePerm(answers[i]))
-        }
+      //let alreadyMutated = new Set()
+      permutations.push(numerals)
+      while(answers.size < 4) {
+        console.log('nnn')
+        console.log('B', Array.from(answers))
+        let i = this.randomRange(0, permutations.length)
+        //if(!alreadyMutated.has(i)){
+          //alreadyMutated.add(i)
+        // if(alreadyMutated.size > 2 || alreadyMutated.size >= answers.size) {
+        //   alreadyMutated = new Set()
+        // }
+        let perm = this.mutatePerm(permutations[i])
+        answers.add(parseInt(perm.join('')))
+        permutations.push(perm)
       }
-      // Get rid of actual answer from answer list
-      let answeri = answers.indexOf(numerals);
-      answers.splice(answeri, 1);
+      answers.delete(num)
+      console.log('en',answers)
       // Add answers to choices lists
       x.push(this.formatFakeAnswer(answers))
       y.push(this.formatFakeAnswer(answers))
       z.push(this.formatFakeAnswer(answers))
     },
     formatFakeAnswer(a) {
-      let s = a.splice(this.randomRange[0,a.length],1)[0].join('')
-      if(s.length==1) {
-        return s
-      }
-      let z = s[0]
-      while(z == '0') {
-        s = s.slice(1)
-        if(s.length==1) {
-          return s
-        }
-        z = s[0]
-      }
+      let l = Array.from(a)
+      let s = l.splice(this.randomRange[0,l.length],1)[0]
+      a.delete(s)
+      // if(s.length)[0].join('')
+      // if(s.length==1) {
+      //   return s
+      // }
+      // let z = s[0]
+      // while(z == '0') {
+      //   s = s.slice(1)
+      //   if(s.length==1) {
+      //     return s
+      //   }
+      //   z = s[0]
+      // }
       return s
     },
     mutatePerm(perm) {
@@ -164,7 +184,12 @@ export default {
       }
       let mutated = perm.slice()
       mutated[i] = m
-      return mutated
+      if(mutated.join('') <= this.end) {
+        return mutated
+      }
+      else {
+        return this.mutatePerm(perm)
+      }
     },
     randomRange(min, max) {
     let num = Math.floor(Math.random() * (max - min) + min);
