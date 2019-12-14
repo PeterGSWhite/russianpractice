@@ -60,6 +60,7 @@
 
 <script>
 import Sounds from '../../../mixins/Sounds.js'
+import { setTimeout } from 'timers';
 export default {
   
   data () {
@@ -131,14 +132,18 @@ export default {
       this.roundIndex = 1
     },
     enqueueAndPlay() {
-      this.playGongSound()
-      setTimeout(this.reset(), 5000)
+      this.reset()
       for(let i = 0; i<this.rounds; i++) {
         let num = this.randomRange(this.start,this.end+1)
         this.queue.push(num)
         this.addRound(num)
       }
-      this.playAll(this.sleepTime)
+      let s = this.playGongSound()
+      console.log(s)
+      s.then(()=>{
+        setTimeout(this.playAll(this.sleepTime), 50000)
+      })
+      
     },
     addRound(num) {
       this.correctAnswers.push(num)

@@ -73,14 +73,16 @@ export default {
           return this.playTTS()
         }    
       },
-      playHowl(path) {
-        this.history.push(path)
+      playHowl(path, noHistory=false) {
+        if(!noHistory) {
+          this.history.push(path)
+        }
         console.log('playhowl', path)
         this.howling = 1
         var sound = new Howl({
           src: path,
           onloaderror: () => {
-            return this.playTTS()},
+            return this.playTTS(true)},
           onend: () => {
             console.log('howler onend')
             this.howling = 0
@@ -89,7 +91,10 @@ export default {
         sound.play();
         return this.ensureNotHowling(this.howling)
       },
-      playTTS() {
+      playTTS(ranAsBackup=false) {
+        if(ranAsBackup) {
+          this.history.pop()
+        }
         this.history.push(this.s)
         console.log('playTTS', this.s)
         let rate = 1 + Math.random()/10 - Math.random()/10
@@ -108,7 +113,9 @@ export default {
         })
       },
       playGongSound() {
-        this.playHowl('sound/gong.mp3')
+        let h = this.playHowl('sound/gong.mp3', true)
+        //console.log('h', h)
+        return h
       }
     },
     
