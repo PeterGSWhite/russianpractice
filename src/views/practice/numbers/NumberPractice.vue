@@ -42,11 +42,6 @@
       >
         <v-col>
           Answer was
-          <p>{{history[rounds-1-index]}} numrounds {{rounds}} index {{index}}</p>
-          <p>{{history[rounds-index]}}</p>
-          <p>{{history[rounds-2]}}</p>
-          <p>{{history[rounds-3]}}</p>
-          <p>{{history[index]}}</p>
           <v-btn @click="reviewSound(history[rounds-1-index])">{{item}}</v-btn>
         </v-col>
         <v-col v-if="givenAnswers[index] !== item">
@@ -112,23 +107,17 @@ export default {
   },
   methods: {
     reviewSound(s) {
-      console.log(s)
       if(!(typeof s == 'number')) {
-        console.log('review howl')
         this.playHowl(s)
       } else {
-        console.log('review tts')
         this.s = s
         this.playTTS()
       }
     },
     submitAnswer(choiceList) {
-      console.log(this.history)
       let answer = choiceList[this.answerIndex]
       this.givenAnswers.unshift(answer)
       this.roundIndex += 1
-      console.log(this.givenAnswers)
-      console.log(this.correctAnswers)
     },
     reset(){
       this.correctAnswers = []
@@ -152,7 +141,6 @@ export default {
       this.playAll(this.sleepTime)
     },
     addRound(num) {
-      console.log('coorect', num)
       this.correctAnswers.push(num)
       let choice = this.randomRange(0,4)
       if(choice == 0) {
@@ -186,8 +174,6 @@ export default {
       //let alreadyMutated = new Set()
       permutations.push(numerals)
       while(answers.size < 4) {
-        console.log('nnn')
-        console.log('B', Array.from(answers))
         let i = this.randomRange(0, permutations.length)
         //if(!alreadyMutated.has(i)){
           //alreadyMutated.add(i)

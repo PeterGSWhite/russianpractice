@@ -31,7 +31,6 @@ export default {
     
     methods: {
       playAll(sleepTime) {
-        console.log(this.queue, this.sleepTime)
         if(this.queue.length) {
           let utterance = this.queue.pop()
           let i = this.playSound(this.numDir, utterance)
@@ -95,7 +94,6 @@ export default {
         console.log('playTTS', this.s)
         let rate = 1 + Math.random()/10 - Math.random()/10
         let pitch = 1 + Math.random()/15 - Math.random()/15
-        console.log(rate, pitch)
         speech.setRate(rate)
         speech.setPitch(pitch)
         return speech.speak({
