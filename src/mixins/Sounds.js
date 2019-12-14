@@ -22,7 +22,8 @@ export default {
     data () {
       return {
         numDir: 'sound/numbers/',
-        queue:[],
+        queue: [],
+        history: [],
         howling: 0,
         s: null
       }
@@ -74,6 +75,7 @@ export default {
         }    
       },
       playHowl(path) {
+        this.history.push(path)
         console.log('playhowl', path)
         this.howling = 1
         var sound = new Howl({
@@ -89,6 +91,7 @@ export default {
         return this.ensureNotHowling(this.howling)
       },
       playTTS() {
+        this.history.push(this.s)
         console.log('playTTS', this.s)
         let rate = 1 + Math.random()/10 - Math.random()/10
         let pitch = 1 + Math.random()/15 - Math.random()/15

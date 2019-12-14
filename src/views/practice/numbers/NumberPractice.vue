@@ -7,12 +7,10 @@
         xs12 class="elevation-1 pa-2 ma-1"
         style="width: 500px">
           <h1>Number Practice</h1>
-          <h2>Lowest number</h2><br>
-          <input v-model.number="start" type="number" min=0 max=999999999><br>
-          <h2>Highest number</h2><br>
-          <input v-model.number="end" type="number" max=1000000000 :min=Number(start)+1 ><br>
+          <v-text-field v-model.number="start" :rules="minrules" type="number" max=999999997 :min=0 label="Lowest Number"></v-text-field><br>
+          <v-text-field v-model.number="end" :rules="maxrules" type="number" max=1000000000 :min=Number(start)+1 label="Highest Number"></v-text-field>
           <v-slider v-model="difficulty" thumb-label min="1" max="5" label="Difficulty"></v-slider>
-          <v-slider v-model="rounds" thumb-label min="5" max="10" label="Rounds"></v-slider>
+          <v-slider @change="reset()" v-model="rounds" thumb-label min="5" max="10" label="Rounds"></v-slider>
           <v-btn @click="enqueueAndPlay()">Play</v-btn>
         </v-flex>
         <v-row
@@ -33,11 +31,27 @@
       </v-col>
     </v-row>
     <v-flex 
-        xs12 class="elevation-1 pa-2 ma-1"
-        style="width: 500px"
-        v-if="!gameActive">
-          <h1>le</h1>
-          <h2>omo</h2><br>
+      xs12 class="elevation-1 pa-2 ma-1"
+      style="width: 500px"
+      v-if="!gameActive">
+      <h1>Review</h1>
+      <v-row
+      class="mb-6"
+      :key="index"
+      v-for="(item, index) in correctAnswers"
+      >
+        <v-col>
+          Answer was
+          <v-btn @click="reviewSound(history[rounds-1-index])">{{item}}</v-btn>
+        </v-col>
+        <v-col v-if="givenAnswers[index] !== item">
+          You put
+          <v-btn @click="playSound(numDir, givenAnswers[index])">{{givenAnswers[index]}}</v-btn>
+        </v-col>
+        <v-col v-if="givenAnswers[index] === item">
+          You were right!
+        </v-col>
+      </v-row>
     </v-flex>
     </v-layout>
     </v-container>   
@@ -61,6 +75,7 @@ export default {
       choiceDs: [],
       givenAnswers: [],
       roundIndex: 1,
+      
     }
   },
   computed: {
@@ -72,9 +87,32 @@ export default {
     },
     gameActive() {
       return this.roundIndex <= this.rounds
-    }
+    },
+    minrules() {
+      return [
+         v => !!v || 'Required',
+         v => v > 0 || 'Cannot be negative',
+         v => v < 999999996 || 'Pick a smaller number',
+         v => this.end - v > 3 || 'Your numbers are too close together',
+      ]
+    },
+    maxrules() {
+      return [
+         v => !!v || 'Required',
+         v => v > 0 || 'Cannot be negative',
+         v => v < 1000000000 || 'Pick a smaller number',
+         v => v - this.start > 3 || 'Your numbers are too close together',
+      ]
+    },
   },
   methods: {
+    reviewSound(s) {
+      if(s.includes('sound/')) {
+        this.playHowl(s)
+      } else {
+        this.playTTS(s)
+      }
+    },
     submitAnswer(choiceList) {
       let answer = choiceList[this.answerIndex]
       this.givenAnswers.unshift(answer)
@@ -89,6 +127,8 @@ export default {
       this.choiceCs = []
       this.choiceDs = []
       this.givenAnswers = []
+      this.history = []
+      this.queue = []
       this.roundIndex = 1
     },
     enqueueAndPlay() {
