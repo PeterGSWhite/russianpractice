@@ -7,12 +7,12 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/grammar',
     name: 'GrammarPractice',
     component: GrammarPractice
   },
   {
-    path: '/numbers',
+    path: '/',
     name: 'NumberPractice',
     component: NumberPractice
   },
