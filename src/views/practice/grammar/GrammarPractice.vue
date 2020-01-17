@@ -9,12 +9,17 @@
           <h1>Grammar Practice</h1>
           <h4>Note: translations aren't perfect (they come from shows/movies and are often context bound)</h4>
           <v-btn
-          @click="start">
+          @click="start"
+          class="ma-1">
               Get New Word!
           </v-btn>
-          <p>{{example_start}} <span style="color: green">{{answerPart}}</span> {{example_end}}</p>
-          <p>{{example_english}}</p>
-          <span v-if="!answer">
+          <span v-if="example_start">
+            <h2>Example Text</h2>
+            <p>{{example_start}} <span style="color: green">{{answerPart}}</span> {{example_end}}</p>
+            <p>{{example_english}}</p>
+          </span>
+          <span v-if="!answer && word_variation">
+          <h2>Choices</h2>
           <v-btn 
           :key="i" 
           v-for="(w,i) in Object.keys(word_variations)"
