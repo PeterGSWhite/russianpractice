@@ -2,8 +2,8 @@
   <v-app>
     <v-content>
       <router-view></router-view>
-      <v-footer
-      absolute
+    </v-content>
+    <v-footer
       class="font-weight-medium"
     >
       <v-col
@@ -13,7 +13,6 @@
         {{ new Date().getFullYear() }} — <strong>Made by Peter White - petergswhite@gmail.com</strong>
       </v-col>
     </v-footer>
-    </v-content>
   </v-app>
 </template>
 

@@ -4,7 +4,7 @@
       <v-layout 
       align-center justify-center column>
         <v-flex 
-        xs12 class="elevation-1 pa-2 ma-1"
+        xs12 class="elevation-1 pa-2"
         style="width: 500px">
           <h1>Grammar Practice</h1>
           <h4>Note: translations aren't perfect (they come from shows/movies and are often context bound)</h4>
@@ -15,7 +15,7 @@
           </v-btn>
           <span v-if="example_start">
             <h2>Example Text</h2>
-            <p>{{example_start}} <span style="color: green">{{answerPart}}</span> {{example_end}}</p>
+            <p>{{example_start}} <span :class="answerSpaceColor">{{answerPart}}</span> {{example_end}}</p>
             <p>{{example_english}}</p>
           </span>
           <span v-if="!answer && word_variation">
@@ -29,17 +29,20 @@
           </v-btn>
           </span>
           <div v-if="answer">
-              <h1>You were tested on: {{dict_word}}</h1>
-              <h2 v-if="answer==word_variation">Well done!</h2>
-              <h2>Correct word form was:</h2>
-              <h2>{{word_variation}}</h2>
+              <h1>You were tested on: <span class="info">{{dict_word}}</span></h1>
+              <h2 
+              v-if="answer==word_variation">
+              You got it right, well done!
+              </h2>
+              <h2 class="mt-2">Correct word form was:</h2>
+              <h2><span class="success">{{word_variation}}</span></h2>
               <h3 :key="i" 
                 v-for="(w,i) in word_variations[word_variation]">
                 <span :key="p" v-for="p in w" class="ma-1">{{p}} </span>
                 </h3>
               <span v-if="!(answer==word_variation)">
-                <h2>You chose</h2>
-                <h2>{{answer}}</h2>
+                <h2 class="mt-2">You chose</h2>
+                <h2><span style="background-color: orangered">{{answer}}</span></h2>
                 <h3 :key="i" 
                 v-for="(w,i) in word_variations[answer]">
                 <span :key="p" v-for="p in w" class="ma-1">{{p}} </span>
@@ -79,6 +82,13 @@ export default {
                 return this.word_variation
             } else {
                 return '_____'
+            }
+        },
+        answerSpaceColor() {
+            if(this.answer) {
+                return 'success'
+            } else {
+                return ''
             }
         }
     },
