@@ -10,7 +10,7 @@
           <h4>Note: translations aren't perfect (they come from shows/movies and are often context bound)</h4>
           <v-btn
           @click="start">
-              Get New Word
+              Get New Word!
           </v-btn>
           <p>{{example_start}} <span style="color: green">{{answerPart}}</span> {{example_end}}</p>
           <p>{{example_english}}</p>
