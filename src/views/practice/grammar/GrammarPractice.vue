@@ -1,3 +1,6 @@
+// ToDo
+// Prune out empty examples
+// For first person past, don't know gender - needs some work
 <template>
   <div class="grammar_practice">
     <v-container id="main" fluid>
@@ -56,8 +59,11 @@
 </template>
 
 <script>
-import wikt from '../../../test_wikt.js'
-import rev from '../../../test_reverso.js'
+import wikt from '../../../testwords.js'
+import pronouns from '../../../pronouns.js'
+import wordrev from '../../../testexamples.js'
+import pronounrev from '../../../testpronounsexamples.js'
+var rev = Object.assign({}, wordrev, pronounrev);
 export default {
     data() {
         return {
@@ -73,6 +79,9 @@ export default {
     computed: {
         wiktKeys() {
             return Object.keys(wikt)
+        },
+        pronounKeys() {
+            return Object.keys(pronouns)
         },
         revSize() {
             return Object.keys(rev).length
@@ -109,7 +118,11 @@ export default {
             this.answer = ans
         },
         getDictWord() {
-            this.dict_word = this.wiktKeys[Math.floor(Math.random() * this.wiktKeys.length)]
+            if(Math.random() < 0.1) {
+                this.dict_word = this.pronounKeys[Math.floor(Math.random() * this.pronounKeys.length)]
+            } else {
+                this.dict_word = this.wiktKeys[Math.floor(Math.random() * this.wiktKeys.length)]
+            }
         },
         getWordVariations(tags) {
             console.log(tags)
