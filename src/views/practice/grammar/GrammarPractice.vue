@@ -16,7 +16,7 @@
           class="ma-1">
               Get New Word!
           </v-btn>
-          <span v-if="example_start">
+          <span v-if="example_english">
             <h2>Example Text</h2>
             <p>{{example_start}} <span :class="answerSpaceColor">{{answerPart}}</span> {{example_end}}</p>
             <p>{{example_english}}</p>
@@ -74,6 +74,7 @@ export default {
             example_end: null,
             example_english: null,
             answer: false,
+            dictchoice: false,
         }
     },
     computed: {
@@ -83,8 +84,11 @@ export default {
         pronounKeys() {
             return Object.keys(pronouns)
         },
+        revKeys() {
+            return Object.keys(rev)
+        },
         revSize() {
-            return Object.keys(rev).length
+            return this.revKeys.length
         },
         answerPart() {
             if(this.answer) {
@@ -104,6 +108,7 @@ export default {
     methods: {
         start() {
             this.dict_word = null
+            this.dictchoice = null
             this.word_variations = {}
             this.word_variation = null
             this.answer = false
@@ -119,16 +124,22 @@ export default {
         },
         getDictWord() {
             if(Math.random() < 0.1) {
+                this.dictchoice = 'pronouns'
                 this.dict_word = this.pronounKeys[Math.floor(Math.random() * this.pronounKeys.length)]
             } else {
+                this.dictchoice = 'wikt'
                 this.dict_word = this.wiktKeys[Math.floor(Math.random() * this.wiktKeys.length)]
             }
         },
         getWordVariations(tags) {
-            console.log(tags)
-            let o = wikt
+            let o = null
+            if(this.dictchoice == 'wikt') {
+                o = wikt
+            }
+            else {
+                o = pronouns
+            }
             tags.forEach(t => {
-                console.log(t)
                 o = o[t]
             });
             if(typeof(o) == "string") {
@@ -136,7 +147,6 @@ export default {
                     this.word_variations[o] = []
                 }
                 this.word_variations[o].push(tags.slice(2))
-                console.log(this.word_variations)
             }
             else {
                 Object.keys(o).forEach(t => {
@@ -151,13 +161,19 @@ export default {
             this.getWordVariations([this.dict_word, 'td'])
             let keys = Object.keys(this.word_variations)
             this.word_variation = keys[Math.floor(Math.random() * keys.length)]
+            let i = 0
+            if(i < 5 && !(rev[this.word_variation].length)) {
+                i+=1
+                this.word_variation = null
+                this.word_variations = {}
+                this.getWordVariations([this.dict_word, 'td'])
+                let keys = Object.keys(this.word_variations)
+                this.word_variation = keys[Math.floor(Math.random() * keys.length)]
+            }
         },
         getExampleText() {
-            console.log('kf', this.word_variation)
             let sentences = rev[this.word_variation]
-            console.log(sentences)
             let sentence = sentences[Math.floor(Math.random()*sentences.length)]
-            console.log(sentence)
             this.example_start = sentence[0]
             this.example_end = sentence[1]
             this.example_english = sentence[2]
