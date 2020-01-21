@@ -1,5 +1,5 @@
 // ToDo
-// Prune out empty examples
+// уметь иметь болеть - Don't have examples for some reason...
 // For first person past, don't know gender - needs some work
 <template>
   <div class="grammar_practice">
@@ -10,7 +10,7 @@
         xs12 class="elevation-1 pa-2"
         style="width: 500px">
           <h1>Grammar Practice</h1>
-          <h4>Note: translations aren't perfect (they come from shows/movies and are often context bound)</h4>
+          <h4>Note: Right now, translations aren't always perfect and sometimes multiple answers are correct but only 1 is accepted</h4>
           <v-btn
           @click="start"
           class="ma-1">
@@ -32,20 +32,20 @@
           </v-btn>
           </span>
           <div v-if="answer">
-              <h1>You were tested on: <span class="info">{{dict_word}}</span></h1>
+              <h1>You were tested on: <span @click="playVariation(dict_word)" class="info" style="white-space: nowrap">{{dict_word}}🔊</span></h1>
               <h2 
               v-if="answer==word_variation">
               You got it right, well done!
               </h2>
               <h2 class="mt-2">Correct word form was:</h2>
-              <h2><span class="success">{{word_variation}}</span></h2>
+              <h2><span @click="playVariation(word_variation)" class="success">{{word_variation}} 🔊</span></h2>
               <h3 :key="i" 
                 v-for="(w,i) in word_variations[word_variation]">
                 <span :key="p" v-for="p in w" class="ma-1">{{p}} </span>
                 </h3>
-              <span v-if="!(answer==word_variation)">
+             <span v-if="!(answer==word_variation)">
                 <h2 class="mt-2">You chose</h2>
-                <h2><span style="background-color: orangered">{{answer}}</span></h2>
+                <h2><span @click="playVariation(answer)" style="background-color: orangered">{{answer}} 🔊</span></h2>
                 <h3 :key="i" 
                 v-for="(w,i) in word_variations[answer]">
                 <span :key="p" v-for="p in w" class="ma-1">{{p}} </span>
@@ -63,6 +63,7 @@ import wikt from '../../../testwords.js'
 import pronouns from '../../../pronouns.js'
 import wordrev from '../../../testexamples.js'
 import pronounrev from '../../../testpronounsexamples.js'
+import Sounds from '../../../mixins/Sounds.js'
 var rev = Object.assign({}, wordrev, pronounrev);
 export default {
     data() {
@@ -132,6 +133,7 @@ export default {
             }
         },
         getWordVariations(tags) {
+            console.log(tags)
             let o = null
             if(this.dictchoice == 'wikt') {
                 o = wikt
@@ -162,22 +164,34 @@ export default {
             let keys = Object.keys(this.word_variations)
             this.word_variation = keys[Math.floor(Math.random() * keys.length)]
             let i = 0
-            if(i < 5 && !(rev[this.word_variation].length)) {
+            while( i < 5 && (!rev[this.word_variation] || !(rev[this.word_variation].length))) {
                 i+=1
+                console.log(i, rev[this.word_variation])
                 this.word_variation = null
                 this.word_variations = {}
                 this.getWordVariations([this.dict_word, 'td'])
                 let keys = Object.keys(this.word_variations)
                 this.word_variation = keys[Math.floor(Math.random() * keys.length)]
+                console.log(this.word_variation)
+            }
+            if(i==5){
+                console.log('bo')
+                this.start()
             }
         },
         getExampleText() {
             let sentences = rev[this.word_variation]
+            console.log(sentences)
             let sentence = sentences[Math.floor(Math.random()*sentences.length)]
             this.example_start = sentence[0]
             this.example_end = sentence[1]
             this.example_english = sentence[2]
+        },
+        playVariation(word) {
+            this.s = word
+            this.playTTS()
         }
-    }
+    },
+    mixins: [Sounds],
 }
 </script>
