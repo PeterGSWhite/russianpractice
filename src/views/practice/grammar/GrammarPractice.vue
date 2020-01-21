@@ -1,5 +1,4 @@
 // ToDo
-// уметь иметь болеть - Don't have examples for some reason...
 // For first person past, don't know gender - needs some work
 <template>
   <div class="grammar_practice">
@@ -32,7 +31,8 @@
           </v-btn>
           </span>
           <div v-if="answer">
-              <h1>You were tested on: <span @click="playVariation(dict_word)" class="info" style="white-space: nowrap">{{dict_word}}🔊</span></h1>
+              <h1 v-if="!pronounKeys.includes(dict_word)">You were tested on: <span @click="playVariation(dict_word)" class="info" style="white-space: nowrap">{{dict_word}}🔊</span></h1>
+              <h1 v-if="pronounKeys.includes(dict_word)">You were tested on: <span class="info" style="white-space: nowrap">{{dict_word}}</span></h1>
               <h2 
               v-if="answer==word_variation">
               You got it right, well done!
@@ -63,8 +63,9 @@ import wikt from '../../../testwords.js'
 import pronouns from '../../../pronouns.js'
 import wordrev from '../../../testexamples.js'
 import pronounrev from '../../../testpronounsexamples.js'
+import revpatch from '../../../revpatch.js'
 import Sounds from '../../../mixins/Sounds.js'
-var rev = Object.assign({}, wordrev, pronounrev);
+var rev = Object.assign({}, wordrev, pronounrev, revpatch);
 export default {
     data() {
         return {
@@ -133,7 +134,6 @@ export default {
             }
         },
         getWordVariations(tags) {
-            console.log(tags)
             let o = null
             if(this.dictchoice == 'wikt') {
                 o = wikt
@@ -166,22 +166,18 @@ export default {
             let i = 0
             while( i < 5 && (!rev[this.word_variation] || !(rev[this.word_variation].length))) {
                 i+=1
-                console.log(i, rev[this.word_variation])
                 this.word_variation = null
                 this.word_variations = {}
                 this.getWordVariations([this.dict_word, 'td'])
                 let keys = Object.keys(this.word_variations)
                 this.word_variation = keys[Math.floor(Math.random() * keys.length)]
-                console.log(this.word_variation)
             }
             if(i==5){
-                console.log('bo')
                 this.start()
             }
         },
         getExampleText() {
             let sentences = rev[this.word_variation]
-            console.log(sentences)
             let sentence = sentences[Math.floor(Math.random()*sentences.length)]
             this.example_start = sentence[0]
             this.example_end = sentence[1]

@@ -61,6 +61,21 @@ var pronouns = {"1st person singular pronoun": {"td":{
     "dative": "Им",
     "instrumental": "Ими",
     "prepositional": "Них"
-}}}
+}},
+'что':{ "td": {
+    "nominative": "что́", 
+    "accusative": "что́", 
+    "genitive": "чего́", 
+    "dative": "чему́", 
+    "instrumental": "чем", 
+    "prepositional": "чём"}},
+'кто':{ "td": {
+    "nominative": "кто́",
+    "accusative": "кого́",
+    "genitive": "кого́́",
+    "dative": "кому́",
+    "instrumental": "ке́м",
+    "prepositional": "ком"}},
+}
 
 export default pronouns

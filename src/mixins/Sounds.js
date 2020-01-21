@@ -54,7 +54,6 @@ export default {
       },
       playSound(dir,s) {
         this.s = s
-        console.log('playsound', dir, this.s)
         try {
           // Get to directory with relevant sounds
           let subDir = dir + this.s +'/' + this.s + '_'
@@ -77,14 +76,12 @@ export default {
         if(!noHistory) {
           this.history.push(path)
         }
-        console.log('playhowl', path)
         this.howling = 1
         var sound = new Howl({
           src: path,
           onloaderror: () => {
             return this.playTTS(true)},
           onend: () => {
-            console.log('howler onend')
             this.howling = 0
           }
         });
@@ -96,7 +93,6 @@ export default {
           this.history.pop()
         }
         this.history.push(this.s)
-        console.log('playTTS', this.s)
         let rate = 1 + Math.random()/10 - Math.random()/10
         let pitch = 1 + Math.random()/15 - Math.random()/15
         speech.setRate(rate)
@@ -106,7 +102,6 @@ export default {
           queue: true,
           listeners: {
             onend: () => {
-              console.log("End utterance")
               this.howling = 0
             }
           }
@@ -114,7 +109,6 @@ export default {
       },
       playGongSound() {
         let h = this.playHowl('sound/gong.mp3', true)
-        //console.log('h', h)
         return h
       }
     },

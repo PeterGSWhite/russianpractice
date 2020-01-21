@@ -139,7 +139,6 @@ export default {
         this.addRound(num)
       }
       let s = this.playGongSound()
-      console.log(s)
       s.then(()=>{
         setTimeout(this.playAll(this.sleepTime), 50000)
       })
@@ -174,7 +173,6 @@ export default {
         answers.add(parseInt(perm.value.join('')))
         perm = permutator.next()
       }
-      console.log('oi')
       // If not enough answers, start mutating permutations
       //let alreadyMutated = new Set()
       permutations.push(numerals)
@@ -190,7 +188,6 @@ export default {
         permutations.push(perm)
       }
       answers.delete(num)
-      console.log('en',answers)
       // Add answers to choices lists
       x.push(this.formatFakeAnswer(answers))
       y.push(this.formatFakeAnswer(answers))
