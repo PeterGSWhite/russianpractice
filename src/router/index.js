@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import NumberPractice from '../views/practice/numbers/NumberPractice.vue'
 import GrammarPractice from '../views/practice/grammar/GrammarPractice.vue'
 import GrammarType from '../views/practice/grammar/GrammarType.vue'
+import VerbAspect from '../views/practice/grammar/VerbAspect.vue'
 
 Vue.use(VueRouter)
 
@@ -16,6 +17,11 @@ const routes = [
     path: '/grammartype',
     name: 'GrammarType',
     component: GrammarType
+  },
+  {
+    path: '/verbaspect',
+    name: 'VerbAspect',
+    component: VerbAspect
   },
   {
     path: '/',
