@@ -5,7 +5,7 @@
         <div>
           <router-link to="/">
           <v-toolbar :dark="$route.name!=='NumberPractice'">
-            <h1>Test Numbers</h1>
+            <h3>Numbers</h3>
           </v-toolbar>
         </router-link>
         </div>
@@ -14,7 +14,7 @@
         <router-link to="/grammar">
         <!-- DONT FORGET TO UPDATE BOTH OR DO SOMETHING CLEVER -->
           <v-toolbar :dark="!(['GrammarPractice', 'GrammarType', 'VerbAspect'].includes($route.name))">
-            <h1>Test Grammar</h1>
+            <h3>Grammar</h3>
           </v-toolbar>
         </router-link>
         </div>
@@ -24,21 +24,21 @@
         <div>
           <router-link to="/grammar">
           <v-toolbar :dark="$route.name!=='GrammarPractice'">
-            <h1>Gap Fill</h1>
+            <h3>Gap Fill</h3>
           </v-toolbar>
         </router-link>
         </div>
         <div>
           <router-link to="/grammartype">
           <v-toolbar :dark="$route.name!=='GrammarType'">
-            <h1>Recall</h1>
+            <h3>Recall</h3>
           </v-toolbar>
         </router-link>
         </div>
         <div>
           <router-link to="/verbaspect">
           <v-toolbar :dark="$route.name!=='VerbAspect'">
-            <h1>Verb Aspect</h1>
+            <h3>Verb Aspect</h3>
           </v-toolbar>
         </router-link>
         </div>
