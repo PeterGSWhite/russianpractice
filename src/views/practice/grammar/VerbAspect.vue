@@ -135,7 +135,6 @@ export default {
                 if(wikt[this.dict_word]['partner']) {
                     flag = true
                     this.partner_dict_word = wikt[this.dict_word]['partner']
-                    console.log(this.partner_dict_word)
                 }
             }
         },

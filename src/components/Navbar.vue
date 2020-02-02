@@ -12,12 +12,14 @@
 
         <div style="flex-basis: 20%">
         <router-link to="/grammar">
+        <!-- DONT FORGET TO UPDATE BOTH OR DO SOMETHING CLEVER -->
           <v-toolbar :dark="!(['GrammarPractice', 'GrammarType', 'VerbAspect'].includes($route.name))">
             <h1>Test Grammar</h1>
           </v-toolbar>
         </router-link>
         </div>
       </v-row>
+      <!-- DONT FORGET TO UPDATE BOTH OR DO SOMETHING CLEVER -->
       <v-row class="child-flex mt-3" v-if="['GrammarPractice', 'GrammarType', 'VerbAspect'].includes($route.name)">
         <div>
           <router-link to="/grammar">
