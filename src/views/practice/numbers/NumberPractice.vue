@@ -33,7 +33,7 @@
     <v-flex 
       xs12 class="elevation-1 pa-2 ma-1"
       style="width: 500px"
-      v-if="!gameActive">
+      v-if="!gameActive && this.startFlag">
       <h1>Review</h1>
       <v-row
       class="mb-6"
@@ -76,7 +76,7 @@ export default {
       choiceDs: [],
       givenAnswers: [],
       roundIndex: 1,
-      
+      startFlag: false
     }
   },
   computed: {
@@ -87,7 +87,7 @@ export default {
       return this.rounds - this.roundIndex
     },
     gameActive() {
-      return this.roundIndex <= this.rounds
+      return this.startFlag && this.roundIndex <= this.rounds
     },
     minrules() {
       return [
@@ -132,6 +132,7 @@ export default {
       this.roundIndex = 1
     },
     enqueueAndPlay() {
+      this.startFlag = true
       this.reset()
       for(let i = 0; i<this.rounds; i++) {
         let num = this.randomRange(this.start,this.end+1)

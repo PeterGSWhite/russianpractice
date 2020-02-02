@@ -14,7 +14,7 @@
           class="ma-1">
               Get New Word!
           </v-btn>
-          <h3>Nominative form is</h3>
+          <span v-if="dict_word"><h3>Nominative form is</h3>
           <h4><span class="mb-3 info">{{dict_word}}</span></h4>
           <h3>Type the case which corresponds to:</h3>
           <h4 :key="i" 
@@ -35,6 +35,7 @@
         ></v-text-field>
         <v-btn @click="submitAnswer(stagingAnswer)">Submit</v-btn>
         </div>
+        </span>
         <div v-if="answer">
             <span v-if="answer !== word_variation">
                 <h3>You chose:</h3>
