@@ -135,6 +135,11 @@ export default {
                 if(wikt[this.dict_word]['partner']) {
                     flag = true
                     this.partner_dict_word = wikt[this.dict_word]['partner']
+                    if(Math.random() < 0.5) {   
+                       let temp = this.dict_word
+                       this.dict_word = this.partner_dict_word
+                       this.partner_dict_word = temp 
+                    } 
                 }
             }
         },
