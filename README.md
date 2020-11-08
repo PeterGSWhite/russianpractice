@@ -1,5 +1,23 @@
 # ruspractice
 
+<h3 align="center">RUSPRACTICE</h3>
+
+  <p align="center">
+    A study tool I made while learning Russian. Practice listening comprehension for numbers (I found it very useful). There's also grammar excercises (though to be honest I didn't find that part too useful).
+    <br/>
+  </p>
+
+<!-- demonstration -->
+### Demonstration
+
+<a href="https://rapidrussian.netlify.app/">Try it out here!</a>
+
+### Built With
+
+* Vue.js
+* Howler (js module)
+* speak-tts (js module)
+
 ## Project setup
 ```
 npm install
@@ -14,16 +32,3 @@ npm run serve
 ```
 npm run build
 ```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
