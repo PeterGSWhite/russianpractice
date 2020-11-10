@@ -1,6 +1,6 @@
-# ruspractice
+# russianpractice
 
-<h3 align="center">RUSPRACTICE</h3>
+<h3 align="center">RAPIDRUSSIAN</h3>
 
   <p align="center">
     A study tool I made while learning Russian. Practice listening comprehension for numbers (I found it very useful). There's also grammar excercises (though to be honest I didn't find that part too useful).
